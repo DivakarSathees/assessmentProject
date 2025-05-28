@@ -24,5 +24,24 @@ namespace dotnetapp.Controllers {
             var token = _authService.GenerateToken(user);
             return Ok(new { token });
         }
+
+        [HttpPost("register")]
+        public IActionResult Register(AuthRequestDto dto) {
+            if (_db.Users.Any(u => u.Username == dto.Username)) {
+                return BadRequest("Username already exists");
+            }
+
+            var user = new User {
+                Id = Guid.NewGuid().ToString(),
+                Username = dto.Username,
+                PasswordHash = dto.Password, // In production, hash the password
+                Role = "Editor" // Default role
+            };
+
+            _db.Users.Add(user);
+            // _db.SaveChanges();
+
+            return CreatedAtAction(nameof(Login), new { username = user.Username }, user);
+        }
     }
 }

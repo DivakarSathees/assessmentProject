@@ -26,7 +26,7 @@ namespace dotnetapp.Controllers {
         }
 
         [HttpPost("rules")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateRule(Rule rule) {
             if (string.IsNullOrWhiteSpace(rule.Expression))
                 return BadRequest("Expression is required");

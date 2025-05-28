@@ -15,7 +15,7 @@ namespace dotnetapp.Controllers {
         }
 
         [HttpGet]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAll() => Ok(_db.Users);
 
         [HttpPost]
