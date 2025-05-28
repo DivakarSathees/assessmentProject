@@ -27,6 +27,8 @@ namespace dotnetapp.Controllers {
 
         [HttpPost("register")]
         public IActionResult Register(AuthRequestDto dto) {
+            // password should be 8 characters minimum
+            
             if (_db.Users.Any(u => u.Username == dto.Username)) {
                 return BadRequest("Username already exists");
             }
@@ -34,8 +36,8 @@ namespace dotnetapp.Controllers {
             var user = new User {
                 Id = Guid.NewGuid().ToString(),
                 Username = dto.Username,
-                PasswordHash = dto.Password, // In production, hash the password
-                Role = "Editor" // Default role
+                PasswordHash = dto.Password,
+                Role = "Editor"
             };
 
             _db.Users.Add(user);

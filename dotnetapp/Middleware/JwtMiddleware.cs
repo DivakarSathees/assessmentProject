@@ -33,7 +33,9 @@ namespace dotnetapp.Middleware {
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1), // Adjust as needed
+                    // ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
