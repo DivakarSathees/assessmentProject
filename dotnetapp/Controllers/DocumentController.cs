@@ -26,50 +26,50 @@ namespace dotnetapp.Controllers {
             return doc == null ? NotFound() : Ok(doc);
         }
 
-        // [HttpPost]
-        // [Authorize(Roles = "Editor")]
-        // public IActionResult CreateDocument(Document doc) {
-        //     Console.WriteLine("Creating document");
-        //     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //     if (_db.Documents.Any(d => d.Title == doc.Title))
-        //         return BadRequest("Document title must be unique");
-        //     doc.Id = Guid.NewGuid().ToString();
-        //     doc.OwnerId = userId;
-        //     _db.Documents.Add(doc);
-        //     return Ok(doc);
-        // }
-
         [HttpPost]
-[Authorize(Roles = "Editor")]
-public async Task<IActionResult> CreateDocument([FromForm] string title, [FromForm] IFormFile file)
-{
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        [Authorize(Roles = "Editor")]
+        public IActionResult CreateDocument(Document doc) {
+            Console.WriteLine("Creating document");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_db.Documents.Any(d => d.Title == doc.Title))
+                return BadRequest("Document title must be unique");
+            doc.Id = Guid.NewGuid().ToString();
+            doc.OwnerId = userId;
+            _db.Documents.Add(doc);
+            return Ok(doc);
+        }
 
-    if (_db.Documents.Any(d => d.Title == title))
-        return BadRequest("Document title must be unique");
+//         [HttpPost]
+// [Authorize(Roles = "Editor")]
+// public async Task<IActionResult> CreateDocument([FromForm] string title, [FromForm] IFormFile file)
+// {
+//     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    if (file == null || file.Length == 0)
-        return BadRequest("Uploaded file is empty");
+//     if (_db.Documents.Any(d => d.Title == title))
+//         return BadRequest("Document title must be unique");
 
-    string content;
-    using (var reader = new StreamReader(file.OpenReadStream()))
-    {
-        content = await reader.ReadToEndAsync();
-    }
+//     if (file == null || file.Length == 0)
+//         return BadRequest("Uploaded file is empty");
 
-    var doc = new Document
-    {
-        Id = Guid.NewGuid().ToString(),
-        Title = title,
-        Content = content,
-        OwnerId = userId
-    };
+//     string content;
+//     using (var reader = new StreamReader(file.OpenReadStream()))
+//     {
+//         content = await reader.ReadToEndAsync();
+//     }
 
-    _db.Documents.Add(doc);
-    // await _db.SaveChangesAsync();
+//     var doc = new Document
+//     {
+//         Id = Guid.NewGuid().ToString(),
+//         Title = title,
+//         Content = content,
+//         OwnerId = userId
+//     };
 
-    return Ok(doc);
-}
+//     _db.Documents.Add(doc);
+//     // await _db.SaveChangesAsync();
+
+//     return Ok(doc);
+// }
 
 
         [HttpPut("{id}")]
