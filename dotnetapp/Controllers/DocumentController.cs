@@ -84,9 +84,11 @@ namespace dotnetapp.Controllers {
                 return NotFound("Document, User, or Rule not found");
 
             var evaluator = new Services.RuleEvaluator();
+            Console.WriteLine($"Evaluating rule: {rule.Expression}");
             var allowed = evaluator.Evaluate(rule.Expression, user, doc);
+            Console.WriteLine($"Access allowed: {allowed}");
             if (!allowed)
-                return Forbid("Access denied: not the owner");
+                return StatusCode(StatusCodes.Status403Forbidden, "Access denied: not the owner");
 
             doc.Title = updatedDoc.Title;
             doc.Content = updatedDoc.Content;
